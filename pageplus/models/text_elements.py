@@ -359,7 +359,7 @@ class Textline(CoordElement):
                 new_baseline_tuples.append(point)
 
             if pts_outside:
-                logging.warning(f"{self.get_id()}: Some points of the baseline are is outside of the textregion "
+                logging.warning(f"{self.get_id()}: Some points of the baseline are outside of the textregion "
                                 f"{self.get_parent_element().attrib['id']}. Points outside {pts_outside}")
                 if not update:
                     return False
