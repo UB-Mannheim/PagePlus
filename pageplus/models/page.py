@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List
 
 import lxml.etree as ET
 from shapely.geometry import LinearRing, Polygon, MultiPoint
@@ -15,8 +15,8 @@ from pageplus.io.writer import write_xml
 
 @dataclass
 class Regions:
-    textregions: Optional[list] = None
-    tableregions: Optional[list] = None
+    textregions: Optional[List[TextRegion]] = None
+    tableregions: Optional[List[TableRegion]] = None
 
 
 @dataclass
@@ -41,6 +41,29 @@ class Page:
         table_region_xpath = f"{{{self.ns}}}TableRegion"
         self.regions.tableregions = [TableRegion(ele, self.ns, parent=self) \
                                      for ele in self.root.iter(table_region_xpath)]
+
+    def get_region_reading_order_ids(self, mode: str = 'auto'):
+        ro_ids = []
+        if mode in ['auto', 'reading_order']:
+            reading_order = self.tree.find(f".//{{{self.ns}}}ReadingOrder")
+            if reading_order is not None:
+                # Process each group in the reading order
+                for group in reading_order.iterfind(f".//{{{self.ns}}}*"):
+                    # Check if the group is an 'OrderedGroup'
+                    if ET.QName(group.tag).localname == 'OrderedGroup':
+                        # Find all 'RegionRefIndexed' elements and sort them by index
+                        ro_ids = [ref.attrib['regionRef'] for ref in
+                                  sorted(group.findall(f"./{{{self.ns}}}RegionRefIndexed"),
+                                         key=lambda r: int(r.attrib['index']))]
+        if mode == 'document' or (not ro_ids and mode == 'auto'):
+            for region in self.root.findall(f".//{{{self.ns}}}*"):
+                region_type = ET.QName(region.tag).localname
+                if region_type in ['TableRegion', 'TextRegion']:
+                    region_id = region.attrib.get('id', None)  # Get the ID attribute
+                    if region_id:
+                        ro_ids.append(region_id)
+        # Return the collected text from regions
+        return ro_ids
 
     def counter(self, level: str = 'textlines') -> int:
         """
@@ -111,18 +134,25 @@ class Page:
 
         return dehyphenated_lines
 
-    def extract_fulltext(self, level="textline", dehyphenate=False, delimiter='\n') -> str:
+    def extract_fulltext(self, level="textline", dehyphenate=False,
+                         reading_order=True, reading_order_mode='reading_order', delimiter='\n') -> str:
         """
         Extracts the full text from the PAGE XML file.
         """
-        fulltext = [unicode_ele.text for textline in self.root.iterfind(f'.//{{{self.ns}}}TextLine')
+        fulltext = []
+        if reading_order:
+            for ro_ids in self.get_region_reading_order_ids():
+                region = self.root.find(f'.//*[@id="{ro_ids}"]')
+                fulltext = [unicode_ele.text for textline in region.iterfind(f".//{{{self.ns}}}TextLine")
+                    for unicode_ele in textline.iterfind(f'.//{{{self.ns}}}Unicode') if unicode_ele.text]
+        else:
+            fulltext = [unicode_ele.text for textline in self.root.iterfind(f'.//{{{self.ns}}}TextLine')
                     for unicode_ele in textline.iterfind(f'.//{{{self.ns}}}Unicode') if unicode_ele.text]
 
         if dehyphenate and fulltext:
             fulltext = self.dehyphe(fulltext)
 
         return delimiter.join(fulltext)
-
 
     def page_coords(self, returntype: str = "string"):
         """
