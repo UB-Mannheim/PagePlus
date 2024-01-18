@@ -101,3 +101,6 @@ pageplus --help
 
 ## Contributing
 Contributions to PagePlus are welcome! If you find a bug or have a feature request, please open an issue.
+
+## Funding
+PagePlus was created during the 3rd funding phase of the [OCR-D project](https://ocr-d.de/en/) and predominantly funded by the [German Research Foundation (DFG)](https://www.dfg.de/foerderung/info_wissenschaft/2020/info_wissenschaft_20_15/index.html).
