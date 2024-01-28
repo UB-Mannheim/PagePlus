@@ -2,15 +2,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Tuple, Optional, List
+from typing import List, Optional, Tuple
 
 import lxml.etree as ET
-from shapely.geometry import LinearRing, Polygon, MultiPoint
+from shapely.geometry import LinearRing, MultiPoint, Polygon
 
-from pageplus.models.table_elements import TableRegion
-from pageplus.models.text_elements import TextRegion
 from pageplus.io.parser import parse_xml
 from pageplus.io.writer import write_xml
+from pageplus.models.table_elements import TableRegion
+from pageplus.models.text_elements import TextRegion
 
 
 @dataclass

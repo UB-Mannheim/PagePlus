@@ -1,15 +1,15 @@
-from typing import List, Optional
-from pathlib import Path
-from enum import Enum
 import csv
+from enum import Enum
+from pathlib import Path
+from typing import List, Optional
 
+import typer
 from rich.progress import track
 from shapely import LineString
-import typer
 from typing_extensions import Annotated
 
 from pageplus.io.logger import logging
-from pageplus.io.utils import collect_xml_files, determine_output_path
+from pageplus.io.utils import collect_xml_files
 from pageplus.models.page import Page
 
 app = typer.Typer()

@@ -5,10 +5,12 @@ from dataclasses import dataclass
 
 import lxml.etree as ET
 import shapely
-from shapely import affinity, normalize, line_interpolate_point, remove_repeated_points, simplify, is_valid_reason
-from shapely.errors import TopologicalError, EmptyPartError
-from shapely.geometry import LineString, LinearRing, Polygon, Point, MultiPoint, MultiPolygon, GeometryCollection
-from shapely.ops import nearest_points, unary_union, split
+from shapely import (affinity, is_valid_reason, line_interpolate_point,
+                     normalize, remove_repeated_points, simplify)
+from shapely.errors import EmptyPartError, TopologicalError
+from shapely.geometry import (GeometryCollection, LinearRing, LineString,
+                              MultiPoint, MultiPolygon, Point, Polygon)
+from shapely.ops import nearest_points, split, unary_union
 
 from pageplus.io.logger import logging
 

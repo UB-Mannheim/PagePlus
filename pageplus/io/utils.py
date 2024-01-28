@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Tuple, Iterator, List
+from typing import Iterator, List, Tuple
 
 import lxml.etree as ET
 
