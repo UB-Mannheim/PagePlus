@@ -1,6 +1,7 @@
 import typer
 
-from pageplus.cli import system, analytics, validation, modification, export, projects
+from pageplus.cli import (analytics, export, modification, projects, system,
+                          validation)
 
 app = typer.Typer()
 app.add_typer(system.app, name="system")

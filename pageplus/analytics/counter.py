@@ -1,8 +1,11 @@
 from __future__ import annotations
-from dataclasses import dataclass
+
 from collections import Counter
+from dataclasses import dataclass
 
 from pageplus.io.logger import logging
+
+
 @dataclass
 class PageCounter:
     textregions: int = 0

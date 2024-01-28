@@ -8,12 +8,13 @@ import lxml.etree as ET
 import numpy as np
 import shapely
 from shapely import affinity, concave_hull
-from shapely.errors import TopologicalError, GEOSException
-from shapely.geometry import LineString, LinearRing, Polygon, Point, MultiPoint, MultiLineString
+from shapely.errors import GEOSException, TopologicalError
+from shapely.geometry import (LinearRing, LineString, MultiLineString,
+                              MultiPoint, Point, Polygon)
 from shapely.ops import nearest_points, unary_union
 
 from pageplus.io.logger import logging
-from pageplus.models.basic_elements import Region, CoordElement
+from pageplus.models.basic_elements import CoordElement, Region
 
 
 @dataclass

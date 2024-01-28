@@ -1,19 +1,12 @@
 from __future__ import annotations
 
-import difflib
 import logging
-import re
-from collections import defaultdict, Counter
-from copy import deepcopy
 from dataclasses import dataclass, field
-from pathlib import Path
-import json
-from typing import Tuple, Optional, Iterator, Any, List
+from typing import Any, Optional
 
 from pageplus.models.basic_elements import Region
 from pageplus.models.text_elements import TextRegion
 
-from pageplus.io.logger import logging
 
 @dataclass
 class TableRegion(Region):

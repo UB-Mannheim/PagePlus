@@ -1,8 +1,9 @@
-import typer
-from typing_extensions import Annotated
-from rich.progress import track
-from typing import List, Optional
 from pathlib import Path
+from typing import List, Optional
+
+import typer
+from rich.progress import track
+from typing_extensions import Annotated
 
 from pageplus.io.logger import logging
 from pageplus.io.utils import collect_xml_files, determine_output_path
